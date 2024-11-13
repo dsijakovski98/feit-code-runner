@@ -14,7 +14,7 @@ The API uses Clerk Authentication as it's middleware to access the endpoints. In
 
 ## Usage
 
-### POST /run
+### `POST /run`
 
 Runs the code provided to it, returning the output of the executed program.
 
