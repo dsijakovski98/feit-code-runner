@@ -22,9 +22,9 @@ Runs the code provided to it, returning the output of the executed program.
 
 ```jsonc
 {
-  "name": "string", // Name of the task/program being executed (Ex. find_min)
-  "code": "string", // The actual code that needs to be executed
-  "language": "string" // The programming language that this code is written in
+  "name": string, // Name of the task/program being executed (Ex. find_min)
+  "code": string, // The actual code that needs to be executed
+  "language": string // The programming language that this code is written in
 }
 ```
 
@@ -33,11 +33,11 @@ Runs the code provided to it, returning the output of the executed program.
 ```jsonc
 // ⛔️
 {
-    "error": "string" // Explanation of an error that occurred
+    "error": string // Explanation of an error that occurred
 }
 
 // ✅
 {
-    "output": "string" // The output of the executed program
+    "output": string // The output of the executed program
 }
 ```
