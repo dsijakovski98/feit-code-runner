@@ -39,7 +39,9 @@ func RunCodeHandler(c *gin.Context) {
 		return
 	}
 
-	output, err := runCode(request)
+	userId, _ := c.Get("userId")
+
+	output, err := runCode(request, userId.(string))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{
 			Error: err.Error(),

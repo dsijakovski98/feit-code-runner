@@ -18,6 +18,10 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Error loading .env file: %v", err)
 	}
+
+	if err := os.Mkdir("_tmp", os.ModePerm); err != nil {
+		log.Printf("Error creating _tmp file: %v", err)
+	}
 }
 
 func main() {
@@ -79,7 +83,7 @@ func authorize() gin.HandlerFunc {
 			return
 		}
 
-		_, err := user.Get(c.Request.Context(), claims.Subject)
+		user, err := user.Get(c.Request.Context(), claims.Subject)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, api.ErrorResponse{
 				Error: "Failed to find user!",
@@ -89,6 +93,7 @@ func authorize() gin.HandlerFunc {
 			return
 		}
 
+		c.Set("userId", user.ID)
 		c.Next()
 	}
 }
