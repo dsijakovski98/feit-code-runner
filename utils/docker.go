@@ -43,7 +43,7 @@ func ContainerExec(containerId string, command []string) (string, error) {
 
 	// Start the exec session
 	exec, err := cli.ContainerExecAttach(ctx, resp.ID, container.ExecAttachOptions{
-		Tty: true,
+		Tty: false,
 	})
 	if err != nil {
 		return "", err
@@ -53,15 +53,26 @@ func ContainerExec(containerId string, command []string) (string, error) {
 
 	// Read the response and convert it to a string
 	var outputBuffer bytes.Buffer
-	_, err = io.Copy(&outputBuffer, exec.Reader)
+	var errBuffer bytes.Buffer
+
+	mux := io.MultiWriter(&outputBuffer, &errBuffer)
+
+	_, err = io.Copy(mux, exec.Reader)
 	if err != nil {
 		panic(err)
 	}
 
+	inspect, err := cli.ContainerExecInspect(ctx, resp.ID)
+	if err != nil {
+		panic(err)
+	}
+
+	if inspect.ExitCode != 0 {
+		errOutput := fmt.Sprintf("Error: %s", errBuffer.String())
+
+		return errOutput, nil
+	}
+
 	// Convert byte slice to string
-	output := outputBuffer.String()
-
-	// Output stored in the buffer
-	return output, nil
-
+	return outputBuffer.String(), nil
 }

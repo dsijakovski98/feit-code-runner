@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/dsijakovski98/feit-code-runner/languages"
@@ -20,7 +21,7 @@ func runCode(req RunRequest, userId string) (string, error) {
 	runner := languages.ProgrammingLanguages[req.Language]
 	langConfig := runner.GetConfig()
 
-	runName := fmt.Sprintf("%s_%s", userId, req.Name)
+	runName := fmt.Sprintf("%s_%s_%s", userId, req.Name, time.Now().Format("Jan_02_15_04_05"))
 	filename := fmt.Sprintf("%s.%s", runName, langConfig.Extension)
 	filepath := fmt.Sprintf("%s/_tmp/%s", dir, filename)
 
@@ -86,19 +87,26 @@ func runCode(req RunRequest, userId string) (string, error) {
 		return "", fmt.Errorf("failed to execute code: " + err.Error())
 	}
 
-	// Cleanup in background using goroutine
+	// Cleanup in background
 	go func() {
 		defer os.Remove(filepath)
 		defer os.Remove(tgzPath)
 
-		if err := docker.ContainerStop(ctx, runContainer.ID, container.StopOptions{}); err != nil {
-			fmt.Printf("Error stopping container: %v\n", err) // Log error but don't block return
-		}
-
-		if err := docker.ContainerRemove(ctx, runContainer.ID, container.RemoveOptions{}); err != nil {
+		if err := docker.ContainerRemove(ctx, runContainer.ID, container.RemoveOptions{Force: true}); err != nil {
 			fmt.Printf("Error removing container: %v\n", err) // Log error but don't block return
 		}
 	}()
+
+	if isErrorOutput(output) {
+		filteredErr := filterErrorOutput(FilterErrorConfig{
+			errOutput:     output,
+			filePath:      codeFilePath,
+			taskName:      req.Name,
+			langExtension: langConfig.Extension,
+		})
+
+		return filteredErr, nil
+	}
 
 	return output, nil
 }
