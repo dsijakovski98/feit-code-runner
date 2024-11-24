@@ -11,7 +11,7 @@ func (sh BashRunner) GetConfig() LanguageConfig {
 }
 
 func (sh BashRunner) ExtraCommands(filePath string, containerId string) (string, error) {
-	// Nothing extra needed
+	// Give execution permission
 	output, err := utils.ContainerExec(containerId, []string{"chmod", "+x", filePath})
 
 	return output, err
