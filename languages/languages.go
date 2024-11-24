@@ -10,15 +10,22 @@ var ProgrammingLanguages = map[string]Runner{
 
 	"TypeScript": TypeScriptRunner{
 		LanguageConfig{
-			DockerImage: "oven/bun:latest",
+			DockerImage: "oven/bun:alpine",
 			Extension:   "ts",
 		},
 	},
 
 	"Go": GolangRunner{
 		LanguageConfig{
-			DockerImage: "golang:latest",
+			DockerImage: "golang:alpine",
 			Extension:   "go",
+		},
+	},
+
+	"Python": PythonRunner{
+		LanguageConfig{
+			DockerImage: "python:alpine",
+			Extension:   "py",
 		},
 	},
 }
