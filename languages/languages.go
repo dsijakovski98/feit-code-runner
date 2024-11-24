@@ -35,4 +35,11 @@ var ProgrammingLanguages = map[string]Runner{
 			Extension:   "rs",
 		},
 	},
+
+	"PHP": PhpRunner{
+		LanguageConfig{
+			DockerImage: "php:alpine",
+			Extension:   "php",
+		},
+	},
 }
