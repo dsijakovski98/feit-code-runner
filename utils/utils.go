@@ -67,3 +67,16 @@ func CreateTgz(inputFileName string) (string, error) {
 
 	return outputPath, nil
 }
+
+const ERROR_PREFIX = "Error: "
+
+func IsErrorOutput(output string) bool {
+	return strings.HasPrefix(output, ERROR_PREFIX)
+}
+
+func GetOutPath(filePath string) string {
+	chunks := strings.Split(filePath, "/")
+	outPath := strings.Join(chunks[:len(chunks)-1], "/") + "/app"
+
+	return outPath
+}

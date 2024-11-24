@@ -8,9 +8,9 @@ func (golang GolangRunner) GetConfig() LanguageConfig {
 	return golang.LanguageConfig
 }
 
-func (golang GolangRunner) ExtraCommands(containerId string) error {
+func (golang GolangRunner) ExtraCommands(filePath string, containerId string) (string, error) {
 	// Nothing extra needed
-	return nil
+	return "", nil
 }
 
 func (golang GolangRunner) CommandChain(filePath string) []string {

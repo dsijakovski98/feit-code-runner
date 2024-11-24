@@ -6,18 +6,13 @@ import (
 	"unicode"
 
 	"github.com/dsijakovski98/feit-code-runner/languages"
+	"github.com/dsijakovski98/feit-code-runner/utils"
 )
-
-const ERROR_PREFIX = "Error: "
 
 func isValidLanguage(language string) bool {
 	_, exists := languages.ProgrammingLanguages[language]
 
 	return exists
-}
-
-func isErrorOutput(output string) bool {
-	return strings.HasPrefix(output, ERROR_PREFIX)
 }
 
 type FilterErrorConfig struct {
@@ -29,7 +24,7 @@ type FilterErrorConfig struct {
 
 func filterErrorOutput(config FilterErrorConfig) string {
 	var cleanErr = strings.TrimSpace(config.errOutput)
-	cleanErr = strings.TrimPrefix(cleanErr, ERROR_PREFIX)
+	cleanErr = strings.TrimPrefix(cleanErr, utils.ERROR_PREFIX)
 
 	chunks := strings.Split(cleanErr, "\n")
 

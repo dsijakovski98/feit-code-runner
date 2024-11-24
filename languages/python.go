@@ -8,9 +8,9 @@ func (py PythonRunner) GetConfig() LanguageConfig {
 	return py.LanguageConfig
 }
 
-func (py PythonRunner) ExtraCommands(containerId string) error {
+func (py PythonRunner) ExtraCommands(filePath string, containerId string) (string, error) {
 	// Nothing extra needed
-	return nil
+	return "", nil
 }
 
 func (py PythonRunner) CommandChain(filePath string) []string {

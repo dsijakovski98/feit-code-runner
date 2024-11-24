@@ -8,6 +8,6 @@ type LanguageConfig struct {
 type Runner interface {
 	// filePath is WITH file extension
 	CommandChain(filePath string) []string
-	ExtraCommands(containerId string) error
+	ExtraCommands(filePath string, containerId string) (string, error)
 	GetConfig() LanguageConfig
 }

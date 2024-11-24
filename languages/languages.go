@@ -28,4 +28,11 @@ var ProgrammingLanguages = map[string]Runner{
 			Extension:   "py",
 		},
 	},
+
+	"Rust": RustRunner{
+		LanguageConfig{
+			DockerImage: "rust:alpine",
+			Extension:   "rs",
+		},
+	},
 }

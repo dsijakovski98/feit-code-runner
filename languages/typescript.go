@@ -8,9 +8,9 @@ func (ts TypeScriptRunner) GetConfig() LanguageConfig {
 	return ts.LanguageConfig
 }
 
-func (js TypeScriptRunner) ExtraCommands(containerId string) error {
+func (js TypeScriptRunner) ExtraCommands(filePath string, containerId string) (string, error) {
 	// Nothing extra needed
-	return nil
+	return "", nil
 }
 
 func (ts TypeScriptRunner) CommandChain(filePath string) []string {

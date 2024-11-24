@@ -77,11 +77,24 @@ func runCode(req RunRequest, userId string) (string, error) {
 		return "", fmt.Errorf("failed to copy tarball to container: " + err.Error())
 	}
 
-	if err := runner.ExtraCommands(runContainer.ID); err != nil {
+	codeFilePath := fmt.Sprintf("%s/%s", codeDir, filename)
+
+	preOutput, err := runner.ExtraCommands(codeFilePath, runContainer.ID)
+	if err != nil {
 		return "", fmt.Errorf("failed to run extra commands: " + err.Error())
 	}
 
-	codeFilePath := fmt.Sprintf("%s/%s", codeDir, filename)
+	if utils.IsErrorOutput(preOutput) {
+		filteredErr := filterErrorOutput(FilterErrorConfig{
+			errOutput:     preOutput,
+			filePath:      codeFilePath,
+			taskName:      req.Name,
+			langExtension: langConfig.Extension,
+		})
+
+		return filterUnicode(filteredErr), nil
+	}
+
 	output, err := utils.ContainerExec(runContainer.ID, runner.CommandChain(codeFilePath))
 	if err != nil {
 		return "", fmt.Errorf("failed to execute code: " + err.Error())
@@ -97,7 +110,7 @@ func runCode(req RunRequest, userId string) (string, error) {
 		}
 	}()
 
-	if isErrorOutput(output) {
+	if utils.IsErrorOutput(output) {
 		filteredErr := filterErrorOutput(FilterErrorConfig{
 			errOutput:     output,
 			filePath:      codeFilePath,

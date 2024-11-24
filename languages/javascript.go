@@ -8,9 +8,9 @@ func (js JavaScriptRunner) GetConfig() LanguageConfig {
 	return js.LanguageConfig
 }
 
-func (js JavaScriptRunner) ExtraCommands(containerId string) error {
+func (js JavaScriptRunner) ExtraCommands(filePath string, containerId string) (string, error) {
 	// Nothing extra needed
-	return nil
+	return "", nil
 }
 
 func (js JavaScriptRunner) CommandChain(filePath string) []string {
