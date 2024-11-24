@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/dsijakovski98/feit-code-runner/languages"
 )
@@ -42,4 +43,10 @@ func filterErrorOutput(config FilterErrorConfig) string {
 	cleanErr = strings.Replace(cleanErr, config.filePath, cleanFilePath, -1)
 
 	return cleanErr
+}
+
+func filterUnicode(output string) string {
+	return strings.TrimFunc(output, func(r rune) bool {
+		return !unicode.IsGraphic(r)
+	})
 }

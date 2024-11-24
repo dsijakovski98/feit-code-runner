@@ -105,8 +105,8 @@ func runCode(req RunRequest, userId string) (string, error) {
 			langExtension: langConfig.Extension,
 		})
 
-		return filteredErr, nil
+		return filterUnicode(filteredErr), nil
 	}
 
-	return output, nil
+	return filterUnicode(output), nil
 }

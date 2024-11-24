@@ -14,4 +14,11 @@ var ProgrammingLanguages = map[string]Runner{
 			Extension:   "ts",
 		},
 	},
+
+	"Go": GolangRunner{
+		LanguageConfig{
+			DockerImage: "golang:latest",
+			Extension:   "go",
+		},
+	},
 }
