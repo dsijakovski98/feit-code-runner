@@ -56,4 +56,11 @@ var ProgrammingLanguages = map[string]Runner{
 			Extension:   "cpp",
 		},
 	},
+
+	"C": CRunner{
+		LanguageConfig{
+			DockerImage: "gcc",
+			Extension:   "c",
+		},
+	},
 }
