@@ -79,6 +79,16 @@ func runCode(req RunRequest, userId string) (string, error) {
 
 	codeFilePath := fmt.Sprintf("%s/%s", codeDir, filename)
 
+	// Cleanup in background
+	cleanup := func() {
+		defer os.Remove(filepath)
+		defer os.Remove(tgzPath)
+
+		if err := docker.ContainerRemove(ctx, runContainer.ID, container.RemoveOptions{Force: true}); err != nil {
+			fmt.Printf("Error removing container: %v\n", err) // Log error but don't block return
+		}
+	}
+
 	preOutput, err := runner.ExtraCommands(codeFilePath, runContainer.ID)
 	if err != nil {
 		return "", fmt.Errorf("failed to run extra commands: " + err.Error())
@@ -92,6 +102,7 @@ func runCode(req RunRequest, userId string) (string, error) {
 			langExtension: langConfig.Extension,
 		})
 
+		go cleanup()
 		return filterUnicode(filteredErr), nil
 	}
 
@@ -100,15 +111,7 @@ func runCode(req RunRequest, userId string) (string, error) {
 		return "", fmt.Errorf("failed to execute code: " + err.Error())
 	}
 
-	// Cleanup in background
-	go func() {
-		defer os.Remove(filepath)
-		defer os.Remove(tgzPath)
-
-		if err := docker.ContainerRemove(ctx, runContainer.ID, container.RemoveOptions{Force: true}); err != nil {
-			fmt.Printf("Error removing container: %v\n", err) // Log error but don't block return
-		}
-	}()
+	go cleanup()
 
 	if utils.IsErrorOutput(output) {
 		filteredErr := filterErrorOutput(FilterErrorConfig{
