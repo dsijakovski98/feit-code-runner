@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/docker/docker/api/types/container"
@@ -21,7 +22,7 @@ func runCode(req RunRequest, userId string) (string, error) {
 	runner := languages.ProgrammingLanguages[req.Language]
 	langConfig := runner.GetConfig()
 
-	runName := fmt.Sprintf("%s_%s_%s", userId, req.Name, time.Now().Format("Jan_02_15_04_05"))
+	runName := strings.ReplaceAll(fmt.Sprintf("%s_%s_%s", userId, req.Name, time.Now().Format("Jan_02_15_04_05")), " ", "_")
 	filename := fmt.Sprintf("%s.%s", runName, langConfig.Extension)
 	filepath := fmt.Sprintf("%s/_tmp/%s", dir, filename)
 

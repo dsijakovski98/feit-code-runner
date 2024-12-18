@@ -41,7 +41,13 @@ func filterErrorOutput(config FilterErrorConfig) string {
 }
 
 func filterUnicode(output string) string {
-	return strings.TrimFunc(output, func(r rune) bool {
-		return !unicode.IsGraphic(r)
-	})
+	return strings.Map(func(r rune) rune {
+		// Allow letters, digits, symbols, and spaces
+		if unicode.IsLetter(r) || unicode.IsDigit(r) || unicode.IsSpace(r) || unicode.IsPunct(r) || unicode.IsSymbol(r) {
+			return r
+		}
+
+		// Discard other characters
+		return -1
+	}, output)
 }
