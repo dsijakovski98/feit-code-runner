@@ -1,0 +1,11 @@
+.env
+.env.production
+
+_tmp
+
+.DS_Store
+
+node_modules
+
+bin
+
