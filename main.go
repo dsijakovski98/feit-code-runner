@@ -33,10 +33,9 @@ func init() {
 
 func main() {
 	// Get the secret key from environment variable
-	secretKey := os.Getenv("CLERK_SECRET_KEY")
-	fmt.Println("SECRET KEY:", secretKey)
+	secretKey := os.Getenv("CLERK_SECRET")
 	if secretKey == "" {
-		log.Fatal("CLERK_SECRET_KEY not set in environment")
+		log.Fatal("CLERK_SECRET not set in environment")
 	}
 
 	clerk.SetKey(secretKey)
