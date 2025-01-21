@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -12,7 +11,6 @@ func GetEnv() string {
 		env = "development"
 	}
 
-	fmt.Println("FEIT_CODE_ENV:", env)
 	return env
 }
 

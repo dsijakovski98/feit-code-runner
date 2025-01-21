@@ -20,6 +20,16 @@ func NewClient() *client.Client {
 	return cli
 }
 
+func CheckClient() error {
+	cli := NewClient()
+
+	if _, err := cli.Info(context.Background()); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func ContainerExec(containerId string, command []string) (string, error) {
 	cli := NewClient()
 	defer cli.Close()

@@ -75,7 +75,6 @@ func addFmtImport(astFile *ast.File) {
 	// Add 'fmt' import if not there
 	importExists := false
 	for _, imp := range astFile.Imports {
-		fmt.Println(imp.Path.Value)
 		if imp.Path.Value == `"fmt"` {
 			importExists = true
 			break

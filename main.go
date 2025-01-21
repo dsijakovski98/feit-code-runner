@@ -42,8 +42,6 @@ func main() {
 
 	router := gin.Default()
 
-	fmt.Println(config.GetAllowedOrigins())
-
 	// Configure CORS middleware
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     config.GetAllowedOrigins(),
@@ -54,6 +52,12 @@ func main() {
 	}))
 
 	router.GET("/health", func(ctx *gin.Context) {
+		err := utils.CheckClient()
+		if err != nil {
+			ctx.String(http.StatusServiceUnavailable, err.Error())
+			return
+		}
+
 		ctx.String(http.StatusOK, "FEIT Code Runner is locked in and ready to go!")
 	})
 
