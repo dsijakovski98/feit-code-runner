@@ -51,6 +51,10 @@ func main() {
 		AllowCredentials: true,
 	}))
 
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "Hey there! I'm FEIT Code's trusty API!")
+	})
+
 	router.GET("/health", func(ctx *gin.Context) {
 		err := utils.CheckClient()
 		if err != nil {
