@@ -58,7 +58,8 @@ func main() {
 	router.GET("/health", func(ctx *gin.Context) {
 		err := utils.CheckClient()
 		if err != nil {
-			ctx.String(http.StatusServiceUnavailable, err.Error())
+			log.Println(err.Error())
+			ctx.String(http.StatusServiceUnavailable, "FEIT Code is currently down...")
 			return
 		}
 
