@@ -77,12 +77,16 @@ func ContainerExec(containerId string, command []string) (string, error) {
 		panic(err)
 	}
 
-	if inspect.ExitCode != 0 {
-		errOutput := fmt.Sprintf("Error: %s", errBuffer.String())
-
-		return errOutput, nil
+	if inspect.ExitCode == OUTPUT_CODE_SUCCESS {
+		return outputBuffer.String(), nil
 	}
 
-	// Convert byte slice to string
-	return outputBuffer.String(), nil
+	if inspect.ExitCode == OUTPUT_CODE_TIMEOUT || inspect.ExitCode == OUTPUT_CODE_SIGTERM {
+		return TIMEOUT_ERROR_MESSAGE, nil
+	}
+
+	errOutput := ERROR_PREFIX + errBuffer.String()
+
+	return errOutput, nil
+
 }

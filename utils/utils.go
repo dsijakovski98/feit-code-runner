@@ -8,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dsijakovski98/feit-code-runner/config"
 )
 
 func CreateTgz(inputFileName string) (string, error) {
@@ -92,9 +94,23 @@ func IsErrorOutput(output string) bool {
 	return strings.HasPrefix(output, ERROR_PREFIX)
 }
 
+func IsTimeoutError(output string) bool {
+	return output == TIMEOUT_ERROR_MESSAGE
+}
+
 func GetOutPath(filePath string) string {
 	chunks := strings.Split(filePath, "/")
 	outPath := strings.Join(chunks[:len(chunks)-1], "/") + "/app"
 
 	return outPath
+}
+
+func GetTimeoutSeconds() string {
+	env := config.GetEnv()
+
+	if env == "production" {
+		return "30"
+	}
+
+	return "5"
 }
