@@ -33,7 +33,11 @@ func RunCodeHandler(c *gin.Context) {
 		return
 	}
 
-	userId, _ := c.Get("userId")
+	userId, ok := c.Get("userId")
+
+	if !ok {
+		userId = "test"
+	}
 
 	output, err := runCode(request, userId.(string))
 	if err != nil {

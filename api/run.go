@@ -12,6 +12,9 @@ import (
 	"github.com/dsijakovski98/feit-code-runner/utils"
 )
 
+// Can make this a dynamic value passed in from the requests
+var TIMEOUT_SECONDS = utils.GetTimeoutSeconds()
+
 type RunRequest struct {
 	Name     string `json:"name" binding:"required"`
 	Code     string `json:"code" binding:"required"`
@@ -117,12 +120,19 @@ func runCode(req RunRequest, userId string) (string, error) {
 		return filterUnicode(filteredErr), nil
 	}
 
-	output, err := utils.ContainerExec(runContainer.ID, runner.RunCommand(codeFilePath))
+	runCommand := runner.RunCommand(codeFilePath)
+	runCommand = append([]string{"timeout", TIMEOUT_SECONDS}, runCommand...)
+
+	output, err := utils.ContainerExec(runContainer.ID, runCommand)
 	if err != nil {
 		return "", fmt.Errorf("%s", "failed to execute code: "+err.Error())
 	}
 
 	go cleanup()
+
+	if utils.IsTimeoutError(output) {
+		return fmt.Sprintf("The program has timed out after %s seconds!", TIMEOUT_SECONDS), nil
+	}
 
 	if utils.IsErrorOutput(output) {
 		filteredErr := filterErrorOutput(FilterErrorConfig{
