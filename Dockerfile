@@ -24,10 +24,13 @@ RUN bun install
 FROM alpine:3.18
 
 # Install runtime dependencies (crucial!)
-RUN apk add --no-cache ca-certificates libc6-compat curl
+RUN apk add --no-cache ca-certificates libc6-compat
+
+RUN apt update && apt install -y bash curl unzip && \
+curl https://bun.sh/install | bash -s -- bun-v${BUN_VERSION}
 
 # Install Bun for JS/TS tests parsing
-RUN wget -qO- https://bun.sh/install | sh && mv /root/.bun/bin/bun /usr/local/bin/bun
+ENV PATH="${PATH}:/root/.bun/bin"
 
 WORKDIR /app
 
