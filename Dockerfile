@@ -27,9 +27,7 @@ FROM alpine:3.18
 RUN apk add --no-cache ca-certificates libc6-compat curl
 
 # Install Bun for JS/TS tests parsing
-RUN curl -fsSL https://bun.sh/install | bash
-RUN echo 'export BUN_INSTALL="$HOME/.bun"' >> ~/.bashrc
-RUN echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> ~/.bashrc
+RUN wget -qO- https://bun.sh/install | bash && mv /root/.bun/bin/bun /usr/local/bin/bun
 
 WORKDIR /app
 
