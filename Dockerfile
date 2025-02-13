@@ -30,7 +30,8 @@ RUN apk add --no-cache ca-certificates libc6-compat
 RUN apk add --no-cache curl bash unzip
 
 # Install Bun (musl version)
-RUN curl -fsSL https://bun.sh/install | bash && ln -s $(which bun) /usr/bin
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="${PATH}:/root/.bun/bin"
 
 WORKDIR /app
 
