@@ -27,7 +27,7 @@ FROM alpine:3.18
 RUN apk add --no-cache ca-certificates libc6-compat
 
 # Install required dependencies
-RUN apk add --no-cache curl bash unzip
+RUN apk add --no-cache curl bash unzip libstdc++ gcc
 
 # Install Bun (musl version)
 RUN curl -fsSL https://bun.sh/install | bash
