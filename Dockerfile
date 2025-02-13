@@ -26,6 +26,11 @@ FROM alpine:3.18
 # Install runtime dependencies (crucial!)
 RUN apk add --no-cache ca-certificates libc6-compat
 
+# Install Bun for JS/TS Test parsing
+RUN curl -fsSL https://oven.sh/bun/install | sh
+# Add Bun to the PATH (important!)
+ENV PATH="/root/.bun/bin:${PATH}"
+
 WORKDIR /app
 
 # Copy only the necessary artifacts
