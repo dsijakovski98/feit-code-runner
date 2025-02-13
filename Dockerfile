@@ -21,17 +21,10 @@ COPY parsers/js-ts/src/ ./src/
 RUN bun install
 
 # Stage 3: Final image
-FROM alpine:3.18
+FROM oven/bun:alpine
 
 # Install runtime dependencies (crucial!)
 RUN apk add --no-cache ca-certificates libc6-compat
-
-# Install required dependencies
-RUN apk add --no-cache curl bash unzip libstdc++ gcc
-
-# Install Bun (musl version)
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH="${PATH}:/root/.bun/bin"
 
 WORKDIR /app
 
