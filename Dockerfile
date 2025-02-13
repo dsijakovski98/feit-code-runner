@@ -17,6 +17,7 @@ FROM oven/bun:latest AS js-ts-builder
 WORKDIR /app/parsers/js-ts
 
 COPY parsers/js-ts/package.json parsers/js-ts/bun.lockb ./
+COPY parsers/js-ts/src/ ./src/
 RUN bun install
 
 # Stage 3: Final image
