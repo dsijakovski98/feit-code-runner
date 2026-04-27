@@ -19,7 +19,7 @@ func GetAllowedOrigins() []string {
 	prod := env == "production"
 
 	if prod {
-		return []string{"https://app.feitcode.com"}
+		return []string{"https://app.feitcode.dev"}
 	}
 
 	return []string{"http://localhost:3001"}
