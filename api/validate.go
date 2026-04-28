@@ -57,8 +57,7 @@ func filterUnicode(output string) string {
 		return -1
 	}, output)
 
-	// Remove consecutive spaces, while keeping new-line characters
-	// https://stackoverflow.com/a/71646989
+	// Remove consecutive spaces, while keeping new-line characters https://stackoverflow.com/a/71646989
 	return strings.ReplaceAll(strings.Join(strings.FieldsFunc(cleanOutput, func(r rune) bool {
 		if r == '\n' {
 			return false
