@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -63,6 +64,11 @@ func main() {
 			return
 		}
 
+		if !api.IsReady() {
+			ctx.String(http.StatusServiceUnavailable, "FEIT Code is warming up...")
+			return
+		}
+
 		ctx.String(http.StatusOK, "FEIT Code Runner is locked in and ready to go!")
 	})
 
@@ -72,6 +78,12 @@ func main() {
 	router.POST("/cleanup", api.CleanupDebugHandler)
 
 	port := fmt.Sprintf(":%s", os.Getenv("PORT"))
+
+	go func() {
+		if err := api.EnsureImagesInstalled(context.Background()); err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	if err := router.Run(port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
