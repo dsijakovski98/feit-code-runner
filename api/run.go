@@ -53,9 +53,10 @@ func runCode(req RunRequest, userId string) (string, error) {
 	docker := utils.NewClient()
 
 	config := container.Config{
-		Image: langConfig.DockerImage,
-		Cmd:   []string{"sh"}, // Use a shell to execute commands,
-		Tty:   true,
+		Image:           langConfig.DockerImage,
+		Cmd:             []string{"sh"}, // Use a shell to execute commands,
+		Tty:             true,
+		NetworkDisabled: true, // Disable external networks access to remote code execution
 	}
 
 	// Create the container
